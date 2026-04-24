@@ -1,0 +1,143 @@
+body {
+    margin: 0; padding: 0;
+    background-color: #05070a;
+    background-image: url('images/galaxy.jpg');
+    background-size: cover; background-position: center; background-attachment: fixed;
+    height: 100vh; color: white;
+    font-family: 'Inter', sans-serif; overflow: hidden;
+}
+
+.stars {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        radial-gradient(rgb(242, 255, 5), rgba(255,255,255,0.2) 2px, transparent 40px),
+        radial-gradient(rgb(240, 248, 11), rgba(255,255,255,0.1) 1px, transparent 30px);
+    background-size: 550px 550px, 350px 350px; opacity: 0.3; z-index: 0;
+}
+
+/* Overlays */
+.view-overlay {
+    position: fixed;
+    top: 55%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: 90%; height: 70%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 24px;
+    z-index: 100; opacity: 0; pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    overflow: hidden;
+}
+
+.view-overlay.active {
+    opacity: 1; pointer-events: all;
+    transform: translate(-50%, -45%) scale(1);
+}
+
+.view-header {
+    padding: 15px 25px;
+    background: rgba(255,255,255,0.05);
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.75rem; letter-spacing: 3px; font-weight: bold;
+}
+
+/* Observation Log Scroll Area */
+.observation-content {
+    height: calc(100% - 60px);
+    overflow-y: auto;
+    padding-bottom: 50px;
+}
+
+.planet-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 15px; padding: 20px; transition: 0.3s ease;
+}
+
+.planet-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+.obs-link { color: #00d4ff; text-decoration: none; font-size: 0.85rem; }
+.planet-stats { font-size: 0.75rem; color: #aaa; line-height: 1.6; }
+.loader-text { font-size: 0.65rem; color: #00d4ff; margin-left: 15px; animation: blink 1.5s infinite; }
+
+@keyframes blink { 50% { opacity: 0.3; } }
+
+/* Scene & Floating Objects */
+.space-scene { position: fixed; top: 0; left: 0; width: 100%; height: 100%; perspective: 1200px; z-index: 1; pointer-events: none; }
+.floating-container { position: absolute; transform-style: preserve-3d; }
+.floating-container img { width: 100%; height: auto; }
+
+.earth { width: 550px; top: 5%; left: -10%; filter: drop-shadow(0 0 50px rgba(0, 162, 255, 0.3)); animation: float3D-earth 6s ease-in-out infinite; }
+.mars { width: 150px; top: 15%; right: 10%; opacity: 0.8; animation: float3D-mars 10s ease-in-out infinite; }
+.astronaut { width: 200px; bottom: 10%; right: 5%; animation: float3D-astronaut 15s ease-in-out infinite; }
+
+/* Hero UI */
+.hero-section { position: relative; height: 100vh; z-index: 10; }
+.btn-glass { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: 0.3s; }
+.btn-glass:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+.custom-title { letter-spacing: 8px; font-weight: bold; }
+
+/* Boxed Nav Buttons */
+.nav-box {
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 18px !important;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.nav-box:hover {
+    background: rgba(0, 212, 255, 0.1);
+    border-color: rgba(0, 212, 255, 0.8);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+    transform: translateY(-2px);
+    color: #fff !important;
+}
+
+/* Animations */
+@keyframes float3D-earth { 0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); } 50% { transform: translate3d(40px, 60px, 150px) rotate(4deg); } }
+@keyframes float3D-mars { 0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); } 50% { transform: translate3d(-30px, -20px, -50px) rotate(-5deg); } }
+@keyframes float3D-astronaut { 0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); } 33% { transform: translate3d(-20px, -40px, 50px) rotate(5deg); } 66% { transform: translate3d(10px, -20px, 120px) rotate(-3deg); } }
+
+/* Scrollbar */
+.observation-content::-webkit-scrollbar { width: 8px; }
+.observation-content::-webkit-scrollbar-track { background: transparent; }
+.observation-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+.detail-container {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+}
+
+.stat-list span:first-child { color: #888; font-size: 0.9rem; }
+.stat-list span:last-child { font-weight: 500; }
+.preview-wrapper { perspective: 1000px; padding: 40px; }
+
+.planet-3d-glow {
+    max-height: 450px;
+    filter: drop-shadow(0 0 60px rgba(0, 162, 255, 0.25));
+    animation: slowRotate 30s linear infinite;
+}
+
+@keyframes slowRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+#backToLog {
+    border-color: rgba(255,255,255,0.2);
+    font-size: 0.8rem;
+    padding: 6px 15px;
+    border-radius: 30px;
+}
+
+#musicToggle { transition: all 0.3s ease; font-weight: normal; font: ultra-condensed small-caps 1.2em "Fira Sans", sans-serif; }
