@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stella | Live Universe Tracker</title>
+    <link rel="icon" type="image/png" href="images/logoo-yellow.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -25,7 +26,6 @@
         <div class="view-header">
             <span>LIVE STELLAR TRACKER</span>
             <button class="close-view btn-close btn-close-white"></button>
-            
         </div>
         <iframe id="skyIframe" data-src="https://stellarium-web.org/" width="100%" height="100%" frameborder="0"></iframe>
     </div>
@@ -49,26 +49,80 @@
         </div>
     </div>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent pt-4">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">✨ STELLA</a>
-            <div class="ms-auto d-flex align-items-center">
-                <ul class="navbar-nav me-4 d-none d-lg-flex gap-3">
-                    <li class="nav-item">
-                        <a id="musicToggle" class="nav-link" href="#" style="cursor: pointer; color: #00d4ff;">🔈 Music: OFF</a>
-                    </li>
-                    <li class="nav-item"><a id="obsBtn" class="nav-link nav-box" href="#">Observations</a></li>
-                    <li class="nav-item"><a class="nav-link nav-box" href="#">Edition</a></li>
-                    <li class="nav-item"><a class="nav-link nav-box" href="#">Equipement</a></li>
-                </ul>
-                <button class="btn btn-outline-light btn-sm px-3">Contact</button>
+    <div id="editionOverlay" class="view-overlay">
+        <div class="view-header">
+            <span>INTERACTIVE CHALLENGES & QUIZZES</span>
+            <button class="close-view btn-close btn-close-white"></button>
+        </div>
+        <div class="observation-content p-4 p-md-5">
+            <h2 class="text-white mb-4">Interactive Exercises</h2>
+            <div class="row g-4 mb-5">
+                
+                <div class="col-md-4">
+                    <div class="challenge-card text-center p-4 h-100">
+                        <div id="knowPlanetsStatic">
+                            <div class="icon-circle mb-3">🔍</div>
+                            <h4 class="fw-bold">Know the planets</h4>
+                            <p class="small text-secondary">Can you identify the planet based on the clues provided?</p>
+                            <button class="btn btn-sm btn-outline-warning w-100" onclick="startIdentifyGame()">Identify Game</button>
+                        </div>
+
+                        <div id="identifyGameUI" style="display:none;">
+                            <p id="gameClue" class="small fw-bold text-info mb-3"></p>
+                            <input type="text" id="gameGuess" class="form-control form-control-sm mb-2" placeholder="Which planet?">
+                            <button onclick="checkIdentifyGuess()" class="btn btn-sm btn-success w-100 mb-2">Submit</button>
+                            <div id="gameFeedback" class="small"></div>
+                            <button class="btn btn-link btn-sm text-secondary p-0 mt-2" onclick="resetCard()">← Back</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="challenge-card text-center p-4 h-100">
+                        <div class="icon-circle mb-3">📏</div>
+                        <h4 class="fw-bold">Distances</h4>
+                        <p class="small text-secondary">Place planets in order from the Sun.</p>
+                        <button class="btn btn-sm btn-outline-dark mt-2" disabled>Coming Soon</button>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="challenge-card text-center p-4 h-100">
+                        <div class="icon-circle mb-3">🪐</div>
+                        <h4 class="fw-bold">Sizes</h4>
+                        <p class="small text-secondary">Order the planets by their scale.</p>
+                        <button class="btn btn-sm btn-outline-dark mt-2" disabled>Coming Soon</button>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-white mb-4">Quiz</h2>
+            <div class="row g-4">
+                <div class="col-md-4"><div class="quiz-card level-1 text-center p-4"><h4>Level 1</h4></div></div>
+                <div class="col-md-4"><div class="quiz-card level-2 text-center p-4"><h4>Level 2</h4></div></div>
+                <div class="col-md-4"><div class="quiz-card level-3 text-center p-4"><h4>Level 3</h4></div></div>
             </div>
         </div>
-    </nav>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-transparent pt-4">
+        <div class="container">
+            <a class="navbar-brand" href="#"><img src="images/logo-yellow.png" alt="Stella" style="height: 120px;"></a>
+            <div class="ms-auto d-flex align-items-center">
+                <ul class="navbar-nav me-4 d-none d-lg-flex gap-3">
+                    <li class="nav-item"><a id="musicToggle" class="nav-link" href="#" style="color: #00d4ff;">🔈 Music: OFF</a></li>
+                    <li class="nav-item"><a id="obsBtn" class="nav-link nav-box" href="#">Observations</a></li>
+                    <li class="nav-item"><a id="editionBtn" class="nav-link nav-box" href="#">Edition</a></li>
+                    <li class="nav-item"><a id="equipBtn" class="nav-link nav-box" href="#">Equipement</a></li>
+                    <li class="nav-item"><a id="contactBtn" class="nav-link nav-box btn-contact" href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav> 
 
     <main class="hero-section d-flex align-items-center justify-content-center text-center">
         <div class="container">
-            <p class="custom-title text-uppercase tracking-widest small mb-2">'Never Stop Exploring!</p>
+            <p class="custom-title text-uppercase mb-2">'Never Stop Exploring!</p>
             <h1 class="display-3 fw-bold text-white mb-4">Observe the sky and the <br> solar system in real time</h1>
             <div class="d-flex justify-content-center gap-3">
                 <button id="skyMapBtn" class="btn btn-glass px-5 py-3">Sky map</button>
@@ -78,95 +132,72 @@
     </main>
 
     <script>
-        // Planet Data
         const planets = [
-            { name: "Mercury", temp: "167°C", day: "58.64d", rev: "87.9d", diam: "4,879 km", mass: "3.30×10²³ kg", desc: "The planet closest to the Sun. Small and rocky.", img: "images/mercury.png" },
-            { name: "Venus", temp: "464°C", day: "243d", rev: "224.7d", diam: "12,104 km", mass: "4.87×10²⁴ kg", desc: "Hottest planet in our solar system with a thick toxic atmosphere.", img: "images/venus.png" },
-            { name: "Earth", temp: "15°C", day: "23h 56m", rev: "365.2d", diam: "12,756 km", mass: "5.97×10²⁴ kg", desc: "The only planet known to support life, covered mostly by water.", img: "images/earth.png" },
-            { name: "Mars", temp: "-63°C", day: "24.6h", rev: "687d", diam: "6,792 km", mass: "6.42×10²³ kg", desc: "The Red Planet, home to the largest volcano in the solar system.", img: "images/mars.png" },
-            { name: "Jupiter", temp: "-110°C", day: "9.9h", rev: "11.8y", diam: "139,820 km", mass: "1.90×10²⁷ kg", desc: "A gas giant twice as massive as all other planets combined.", img: "images/jupiter.png" },
-            { name: "Saturn", temp: "-140°C", day: "10.7h", rev: "29.4y", diam: "116,460 km", mass: "5.68×10²⁶ kg", desc: "Adorned with a dazzling, complex system of icy rings.", img: "images/saturn.png" },
-            { name: "Uranus", temp: "-195°C", day: "17.2h", rev: "84y", diam: "50,724 km", mass: "8.68×10²⁵ kg", desc: "An ice giant with a unique tilt, rotating on its side.", img: "images/uranus.png" },
-            { name: "Neptune", temp: "-201°C", day: "16.1h", rev: "164.8y", diam: "49,244 km", mass: "1.02×10²⁶ kg", desc: "The most distant major planet, dark, cold and whipped by winds.", img: "images/neptune.png" }
+            { name: "Mercury", desc: "The planet closest to the Sun. Small and rocky." },
+            { name: "Venus", desc: "Hottest planet in our solar system with a thick toxic atmosphere." },
+            { name: "Earth", desc: "The only planet known to support life, covered mostly by water." },
+            { name: "Mars", desc: "The Red Planet, home to the largest volcano in the solar system." },
+            { name: "Jupiter", desc: "A gas giant twice as massive as all other planets combined." },
+            { name: "Saturn", desc: "Adorned with a dazzling, complex system of icy rings." },
+            { name: "Uranus", desc: "An ice giant with a unique tilt, rotating on its side." },
+            { name: "Neptune", desc: "The most distant major planet, dark, cold and whipped by winds." }
         ];
 
+        // UI Toggles
+        function resetCard() {
+            document.getElementById('knowPlanetsStatic').style.display = 'block';
+            document.getElementById('identifyGameUI').style.display = 'none';
+        }
+
+        // --- IDENTIFY GAME LOGIC ---
+        let currentTarget = null;
+        function startIdentifyGame() {
+            document.getElementById('knowPlanetsStatic').style.display = 'none';
+            document.getElementById('identifyGameUI').style.display = 'block';
+            nextGameQuestion();
+        }
+
+        function nextGameQuestion() {
+            currentTarget = planets[Math.floor(Math.random() * planets.length)];
+            document.getElementById('gameClue').innerText = "Clue: " + currentTarget.desc;
+            document.getElementById('gameGuess').value = "";
+            document.getElementById('gameFeedback').innerText = "";
+        }
+
+        function checkIdentifyGuess() {
+            const guessInput = document.getElementById('gameGuess');
+            const guess = guessInput.value.trim().toLowerCase();
+            const feedback = document.getElementById('gameFeedback');
+            
+            if (guess === currentTarget.name.toLowerCase()) {
+                feedback.innerHTML = "✅ Correct! That is " + currentTarget.name;
+                feedback.className = "small text-success";
+                setTimeout(nextGameQuestion, 2000);
+            } else {
+                feedback.innerHTML = "❌ Try again!";
+                feedback.className = "small text-danger";
+            }
+        }
+
+        // Navigation & General Logic
         const music = document.getElementById('bgMusic');
         const musicToggle = document.getElementById('musicToggle');
         const overlays = document.querySelectorAll('.view-overlay');
 
-        // Render Planets
-        function renderPlanets() {
-            const grid = document.getElementById('planetGrid');
-            grid.innerHTML = planets.map((p, i) => `
-                <div class="col-md-6">
-                    <div class="planet-card">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h3 class="h4 mb-0">${p.name}</h3>
-                            <a href="#" class="obs-link">Observation →</a>
-                        </div>
-                        <div class="planet-stats mb-3">Diam: ${p.diam} | Temp: ${p.temp}</div>
-                        <p class="small text-secondary">${p.desc}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        // Music Toggle Function
-        function toggleMusic() {
-            if (music.paused) {
-                music.play().catch(error => {
-                    console.error("Playback failed:", error);
-                    alert("Audio file not found at 'audio/space-theme.mp3'. Please check your folder!");
-                });
-                musicToggle.innerHTML = "🔊 Music: ON";
-            } else {
-                music.pause();
-                musicToggle.innerHTML = "🔈 Music: OFF";
-            }
-        }
-
-        musicToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            toggleMusic();
-        });
-
-        // Close All Overlays
-        function closeAll() {
-            overlays.forEach(o => o.classList.remove('active'));
-            window.focus(); // Returns focus to main page for Esc key
-        }
-
-        // Global Key Listener for ESC
-        document.addEventListener('keydown', (e) => {
-            if (e.key === "Escape") {
-                closeAll();
-            }
-        });
-
-        // Button Click Handlers
-        document.getElementById('skyMapBtn').onclick = () => {
-            closeAll();
-            document.getElementById('skyMapOverlay').classList.add('active');
-            const frame = document.getElementById('skyIframe');
-            if(!frame.src) frame.src = frame.getAttribute('data-src');
-        };
-
-        document.getElementById('solarBtn').onclick = () => {
-            closeAll();
-            document.getElementById('solarOverlay').classList.add('active');
-            const frame = document.getElementById('solarIframe');
-            if(!frame.src) frame.src = frame.getAttribute('data-src');
-        };
-
-        document.getElementById('obsBtn').onclick = (e) => {
-            e.preventDefault();
-            closeAll();
-            document.getElementById('observationOverlay').classList.add('active');
-        };
-
+        function closeAll() { overlays.forEach(o => o.classList.remove('active')); }
+        
+        document.getElementById('obsBtn').onclick = (e) => { e.preventDefault(); closeAll(); document.getElementById('observationOverlay').classList.add('active'); };
+        document.getElementById('editionBtn').onclick = (e) => { e.preventDefault(); closeAll(); document.getElementById('editionOverlay').classList.add('active'); };
         document.querySelectorAll('.close-view').forEach(b => b.onclick = closeAll);
+        
+        musicToggle.onclick = (e) => {
+            e.preventDefault();
+            if (music.paused) { music.play(); musicToggle.innerText = "🔊 Music: ON"; }
+            else { music.pause(); musicToggle.innerText = "🔈 Music: OFF"; }
+        };
 
-        renderPlanets();
+        document.getElementById('skyMapBtn').onclick = () => { closeAll(); document.getElementById('skyMapOverlay').classList.add('active'); document.getElementById('skyIframe').src = "https://stellarium-web.org/"; };
+        document.getElementById('solarBtn').onclick = () => { closeAll(); document.getElementById('solarOverlay').classList.add('active'); document.getElementById('solarIframe').src = "https://www.solarsystemscope.com/iframe"; };
     </script>
 </body>
 </html>

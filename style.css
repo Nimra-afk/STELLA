@@ -72,9 +72,9 @@ body {
 .floating-container { position: absolute; transform-style: preserve-3d; }
 .floating-container img { width: 100%; height: auto; }
 
-.earth { width: 550px; top: 5%; left: -10%; filter: drop-shadow(0 0 50px rgba(0, 162, 255, 0.3)); animation: float3D-earth 6s ease-in-out infinite; }
-.mars { width: 150px; top: 15%; right: 10%; opacity: 0.8; animation: float3D-mars 10s ease-in-out infinite; }
-.astronaut { width: 200px; bottom: 10%; right: 5%; animation: float3D-astronaut 15s ease-in-out infinite; }
+.earth { width: 850px; top: 20%; left: -20%; filter: drop-shadow(0 0 50px rgba(0, 162, 255, 0.3)); animation: float3D-earth 6s ease-in-out infinite; }
+.mars { width: 350px; top: 15%; right: 10%; opacity: 0.8; animation: float3D-mars 10s ease-in-out infinite; }
+.astronaut { width: 200px; bottom: 10%; right: 5%;animation: float3D-astronaut 10s ease-in-out infinite; }
 
 /* Hero UI */
 .hero-section { position: relative; height: 100vh; z-index: 10; }
@@ -166,4 +166,37 @@ body {
 
 .btn-close-white:hover {
     opacity: 1;
+}
+/* Edition Section Styling */
+.challenge-card {
+    background: white; /* Matches your screenshot exactly */
+    border-radius: 15px;
+    color: #333;
+    transition: transform 0.3s ease;
+    height: 100%;
+}
+
+.challenge-card h4 { color: #000; font-weight: bold; }
+
+.icon-circle {
+    font-size: 2rem;
+    display: inline-block;
+}
+
+.quiz-card {
+    background: #343a40; /* Dark gray like your screenshot */
+    border-radius: 15px;
+    color: white;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: 0.3s;
+}
+
+.quiz-card:hover {
+    background: #495057;
+    transform: translateY(-5px);
+}
+
+.quiz-card.level-3 {
+    background: #212529; /* Darker for higher levels */
 }
