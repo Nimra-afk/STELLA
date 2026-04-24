@@ -7,6 +7,115 @@
     <link rel="icon" type="image/png" href="images/logoo-yellow.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Distance Game Specific Styles */
+        .rank-slot {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px dashed #444;
+            border-radius: 12px;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            transition: 0.3s;
+        }
+        .rank-slot.filled { border-style: solid; border-color: #00d4ff; background: rgba(0, 212, 255, 0.1); }
+        .planet-thumb-sm { width: 50px; height: 50px; object-fit: contain; margin-bottom: 8px; }
+        .rank-number {
+            background: #ffc107;
+            color: #000;
+            width: 25px;
+            height: 25px;
+            line-height: 25px;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+        .shuffle-zone {
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .clickable-planet {
+            cursor: pointer;
+            text-align: center;
+            transition: transform 0.2s;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .clickable-planet:hover { transform: scale(1.1); background: rgba(255,255,255,0.05); }
+
+        /* Observation Card Styles */
+        .observation-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            transition: 0.3s;
+            text-align: center;
+            height: 100%;
+        }
+        .observation-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+            border-color: #00d4ff;
+        }
+        .obs-planet-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        /* --- PURE CSS OBSERVATION LOG LOGIC --- */
+        .planet-detail-view {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        #view-mercury:target, #view-venus:target, #view-earth:target, #view-mars:target,
+        #view-jupiter:target, #view-saturn:target, #view-uranus:target, #view-neptune:target {
+            display: block;
+        }
+
+        .observation-content:has(.planet-detail-view:target) #obsDashboard {
+            display: none;
+        }
+
+        .stat-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .log-back-btn {
+            color: #00d4ff;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        .rotating-planet-lg {
+            max-width: 300px;
+            filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.4));
+            animation: floatAnim 6s ease-in-out infinite;
+        }
+        @keyframes floatAnim {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; } to { opacity: 1; }
+        }
+    </style>
 </head>
 <body>
 
@@ -43,9 +152,38 @@
             <span id="logHeaderTitle">PLANETARY OBSERVATION LOG</span>
             <button class="close-view btn-close btn-close-white"></button>
         </div>
-        <div id="obsDashboard" class="observation-content p-4 p-md-5">
-            <h2 class="text-white mb-4">Planets</h2>
-            <div class="row g-4" id="planetGrid"></div>
+        <div class="observation-content p-4 p-md-5">
+            
+            <div id="obsDashboard">
+                <h2 class="text-white mb-4">Planets</h2>
+                <div class="row g-4" id="planetGrid">
+                    <div class="col-md-3"><a href="#view-mercury" class="text-decoration-none"><div class="observation-card"><img src="images/mercury.png" class="obs-planet-img"><h4 class="text-white">Mercury</h4><p class="small text-secondary">The Swift Planet</p></div></a></div>
+                    <div class="col-md-3"><a href="#view-venus" class="text-decoration-none"><div class="observation-card"><img src="images/venus.png" class="obs-planet-img"><h4 class="text-white">Venus</h4><p class="small text-secondary">Earth's Evil Twin</p></div></a></div>
+                    <div class="col-md-3"><a href="#view-earth" class="text-decoration-none"><div class="observation-card"><img src="images/earth.png" class="obs-planet-img"><h4 class="text-white">Earth</h4><p class="small text-secondary">Our Blue Marble</p></div></a></div>
+                    <div class="col-md-3"><a href="#view-mars" class="text-decoration-none"><div class="observation-card"><img src="images/mars.png" class="obs-planet-img"><h4 class="text-white">Mars</h4><p class="small text-secondary">The Red Planet</p></div></a></div>
+                    <div class="col-md-3"><a href="#view-jupiter" class="text-decoration-none"><div class="observation-card"><img src="images/jupiter.png" class="obs-planet-img"><h4 class="text-white">Jupiter</h4><p class="small text-secondary">King of Planets</p></div></a></div>
+                    <div class="col-md-3"><a href="#view-saturn" class="text-decoration-none"><div class="observation-card"><img src="images/saturn.png" class="obs-planet-img"><h4 class="text-white">Saturn</h4><p class="small text-secondary">Lord of the Rings</p></div></a></div>
+                    <div class="col-md-3"><a href="#view-uranus" class="text-decoration-none"><div class="observation-card"><img src="images/uranus.png" class="obs-planet-img"><h4 class="text-white">Uranus</h4><p class="small text-secondary">The Sideways Planet</p></div></a></div>
+                    <div class="col-md-3"><a href="#view-neptune" class="text-decoration-none"><div class="observation-card"><img src="images/neptune.png" class="obs-planet-img"><h4 class="text-white">Neptune</h4><p class="small text-secondary">The Windy Giant</p></div></a></div>
+                </div>
+            </div>
+
+            <div id="view-mercury" class="planet-detail-view"><a href="#obsDashboard" class="log-back-btn">← Back</a><div class="row align-items-center"><div class="col-md-7"><h1 class="display-4 fw-bold text-warning">MERCURY</h1><p class="lead text-white-50">Small and rocky. It is the fastest planet in our solar system.</p><div class="mt-4 p-4" style="background: rgba(255,255,255,0.05); border-radius: 15px;"><div class="stat-line"><span>Diameter</span><strong>4,879 km</strong></div><div class="stat-line"><span>Mass</span><strong>3.28 × 10²³ kg</strong></div><div class="stat-line"><span>Avg Temp</span><strong>167°C</strong></div></div></div><div class="col-md-5 text-center"><img src="images/mercury.png" class="rotating-planet-lg"></div></div></div>
+            
+            <div id="view-venus" class="planet-detail-view"><a href="#obsDashboard" class="log-back-btn">← Back</a><div class="row align-items-center"><div class="col-md-7"><h1 class="display-4 fw-bold text-warning">VENUS</h1><p class="lead text-white-50">Hottest planet in our solar system with a thick toxic atmosphere.</p><div class="mt-4 p-4" style="background: rgba(255,255,255,0.05); border-radius: 15px;"><div class="stat-line"><span>Diameter</span><strong>12,104 km</strong></div><div class="stat-line"><span>Mass</span><strong>4.87 × 10²⁴ kg</strong></div><div class="stat-line"><span>Avg Temp</span><strong>464°C</strong></div></div></div><div class="col-md-5 text-center"><img src="images/venus.png" class="rotating-planet-lg"></div></div></div>
+
+            <div id="view-earth" class="planet-detail-view"><a href="#obsDashboard" class="log-back-btn">← Back</a><div class="row align-items-center"><div class="col-md-7"><h1 class="display-4 fw-bold text-warning">EARTH</h1><p class="lead text-white-50">The only planet known to support life, covered mostly by water.</p><div class="mt-4 p-4" style="background: rgba(255,255,255,0.05); border-radius: 15px;"><div class="stat-line"><span>Diameter</span><strong>12,742 km</strong></div><div class="stat-line"><span>Mass</span><strong>5.97 × 10²⁴ kg</strong></div><div class="stat-line"><span>Avg Temp</span><strong>15°C</strong></div></div></div><div class="col-md-5 text-center"><img src="images/earth.png" class="rotating-planet-lg"></div></div></div>
+
+            <div id="view-mars" class="planet-detail-view"><a href="#obsDashboard" class="log-back-btn">← Back</a><div class="row align-items-center"><div class="col-md-7"><h1 class="display-4 fw-bold text-warning">MARS</h1><p class="lead text-white-50">The Red Planet, home to the largest volcano in the solar system.</p><div class="mt-4 p-4" style="background: rgba(255,255,255,0.05); border-radius: 15px;"><div class="stat-line"><span>Diameter</span><strong>6,779 km</strong></div><div class="stat-line"><span>Mass</span><strong>6.39 × 10²³ kg</strong></div><div class="stat-line"><span>Avg Temp</span><strong>-65°C</strong></div></div></div><div class="col-md-5 text-center"><img src="images/mars.png" class="rotating-planet-lg"></div></div></div>
+
+            <div id="view-jupiter" class="planet-detail-view"><a href="#obsDashboard" class="log-back-btn">← Back</a><div class="row align-items-center"><div class="col-md-7"><h1 class="display-4 fw-bold text-warning">JUPITER</h1><p class="lead text-white-50">A gas giant twice as massive as all other planets combined.</p><div class="mt-4 p-4" style="background: rgba(255,255,255,0.05); border-radius: 15px;"><div class="stat-line"><span>Diameter</span><strong>139,820 km</strong></div><div class="stat-line"><span>Mass</span><strong>1.90 × 10²⁷ kg</strong></div><div class="stat-line"><span>Avg Temp</span><strong>-110°C</strong></div></div></div><div class="col-md-5 text-center"><img src="images/jupiter.png" class="rotating-planet-lg"></div></div></div>
+
+            <div id="view-saturn" class="planet-detail-view"><a href="#obsDashboard" class="log-back-btn">← Back</a><div class="row align-items-center"><div class="col-md-7"><h1 class="display-4 fw-bold text-warning">SATURN</h1><p class="lead text-white-50">Adorned with a dazzling, complex system of icy rings.</p><div class="mt-4 p-4" style="background: rgba(255,255,255,0.05); border-radius: 15px;"><div class="stat-line"><span>Diameter</span><strong>116,460 km</strong></div><div class="stat-line"><span>Mass</span><strong>5.68 × 10²⁶ kg</strong></div><div class="stat-line"><span>Avg Temp</span><strong>-140°C</strong></div></div></div><div class="col-md-5 text-center"><img src="images/saturn.png" class="rotating-planet-lg"></div></div></div>
+
+            <div id="view-uranus" class="planet-detail-view"><a href="#obsDashboard" class="log-back-btn">← Back</a><div class="row align-items-center"><div class="col-md-7"><h1 class="display-4 fw-bold text-warning">URANUS</h1><p class="lead text-white-50">An ice giant with a unique tilt, rotating on its side.</p><div class="mt-4 p-4" style="background: rgba(255,255,255,0.05); border-radius: 15px;"><div class="stat-line"><span>Diameter</span><strong>50,724 km</strong></div><div class="stat-line"><span>Mass</span><strong>8.68 × 10²⁵ kg</strong></div><div class="stat-line"><span>Avg Temp</span><strong>-195°C</strong></div></div></div><div class="col-md-5 text-center"><img src="images/uranus.png" class="rotating-planet-lg"></div></div></div>
+
+            <div id="view-neptune" class="planet-detail-view"><a href="#obsDashboard" class="log-back-btn">← Back</a><div class="row align-items-center"><div class="col-md-7"><h1 class="display-4 fw-bold text-warning">NEPTUNE</h1><p class="lead text-white-50">Dark, cold and whipped by supersonic winds.</p><div class="mt-4 p-4" style="background: rgba(255,255,255,0.05); border-radius: 15px;"><div class="stat-line"><span>Diameter</span><strong>49,244 km</strong></div><div class="stat-line"><span>Mass</span><strong>1.02 × 10²⁶ kg</strong></div><div class="stat-line"><span>Avg Temp</span><strong>-201°C</strong></div></div></div><div class="col-md-5 text-center"><img src="images/neptune.png" class="rotating-planet-lg"></div></div></div>
+
         </div>
     </div>
 
@@ -55,52 +193,59 @@
             <button class="close-view btn-close btn-close-white"></button>
         </div>
         <div class="observation-content p-4 p-md-5">
-            <h2 class="text-white mb-4">Interactive Exercises</h2>
-            <div class="row g-4 mb-5">
-                
-                <div class="col-md-4">
-                    <div class="challenge-card text-center p-4 h-100">
-                        <div id="knowPlanetsStatic">
-                            <div class="icon-circle mb-3">🔍</div>
-                            <h4 class="fw-bold">Know the planets</h4>
-                            <p class="small text-secondary">Can you identify the planet based on the clues provided?</p>
-                            <button class="btn btn-sm btn-outline-warning w-100" onclick="startIdentifyGame()">Identify Game</button>
+            <div id="exercisesMenu">
+                <h2 class="text-white mb-4">Interactive Exercises</h2>
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <div class="challenge-card text-center p-4 h-100">
+                            <div id="knowPlanetsStatic">
+                                <div class="icon-circle mb-3">🔍</div>
+                                <h4 class="fw-bold">Know the planets</h4>
+                                <p class="small text-secondary">Identify the planet based on clues.</p>
+                                <button class="btn btn-sm btn-outline-warning w-100" onclick="startIdentifyGame()">Identify Game</button>
+                            </div>
+                            <div id="identifyGameUI" style="display:none;">
+                                <p id="gameClue" class="small fw-bold text-info mb-3"></p>
+                                <input type="text" id="gameGuess" class="form-control form-control-sm mb-2" placeholder="Which planet?">
+                                <button onclick="checkIdentifyGuess()" class="btn btn-sm btn-success w-100 mb-2">Submit</button>
+                                <div id="gameFeedback" class="small"></div>
+                                <button class="btn btn-link btn-sm text-secondary p-0 mt-2" onclick="resetIdentifyCard()">← Back</button>
+                            </div>
                         </div>
-
-                        <div id="identifyGameUI" style="display:none;">
-                            <p id="gameClue" class="small fw-bold text-info mb-3"></p>
-                            <input type="text" id="gameGuess" class="form-control form-control-sm mb-2" placeholder="Which planet?">
-                            <button onclick="checkIdentifyGuess()" class="btn btn-sm btn-success w-100 mb-2">Submit</button>
-                            <div id="gameFeedback" class="small"></div>
-                            <button class="btn btn-link btn-sm text-secondary p-0 mt-2" onclick="resetCard()">← Back</button>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="challenge-card text-center p-4 h-100">
+                            <div class="icon-circle mb-3">📏</div>
+                            <h4 class="fw-bold">Distances</h4>
+                            <p class="small text-secondary">Place planets in order from the Sun.</p>
+                            <button class="btn btn-sm btn-outline-warning mt-2 w-100" onclick="startDistanceGame()">Start Game</button>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="challenge-card text-center p-4 h-100">
+                            <div class="icon-circle mb-3">🪐</div>
+                            <h4 class="fw-bold">Sizes</h4>
+                            <p class="small text-secondary">Order the planets by their scale.</p>
+                            <button class="btn btn-sm btn-outline-dark mt-2" disabled>Coming Soon</button>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-4">
-                    <div class="challenge-card text-center p-4 h-100">
-                        <div class="icon-circle mb-3">📏</div>
-                        <h4 class="fw-bold">Distances</h4>
-                        <p class="small text-secondary">Place planets in order from the Sun.</p>
-                        <button class="btn btn-sm btn-outline-dark mt-2" disabled>Coming Soon</button>
-                    </div>
-                </div>
-
-                <div class="col-md-4">
-                    <div class="challenge-card text-center p-4 h-100">
-                        <div class="icon-circle mb-3">🪐</div>
-                        <h4 class="fw-bold">Sizes</h4>
-                        <p class="small text-secondary">Order the planets by their scale.</p>
-                        <button class="btn btn-sm btn-outline-dark mt-2" disabled>Coming Soon</button>
-                    </div>
+                <h2 class="text-white mb-4">Quiz</h2>
+                <div class="row g-4">
+                    <div class="col-md-4"><div class="quiz-card level-1 text-center p-4"><h4>Level 1</h4></div></div>
+                    <div class="col-md-4"><div class="quiz-card level-2 text-center p-4"><h4>Level 2</h4></div></div>
+                    <div class="col-md-4"><div class="quiz-card level-3 text-center p-4"><h4>Level 3</h4></div></div>
                 </div>
             </div>
 
-            <h2 class="text-white mb-4">Quiz</h2>
-            <div class="row g-4">
-                <div class="col-md-4"><div class="quiz-card level-1 text-center p-4"><h4>Level 1</h4></div></div>
-                <div class="col-md-4"><div class="quiz-card level-2 text-center p-4"><h4>Level 2</h4></div></div>
-                <div class="col-md-4"><div class="quiz-card level-3 text-center p-4"><h4>Level 3</h4></div></div>
+            <div id="distanceGameUI" style="display:none;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="text-white m-0">Planetary Alignment</h2>
+                    <button class="btn btn-outline-light btn-sm" onclick="closeDistanceGame()">← Back to Menu</button>
+                </div>
+                <div class="row g-3 mb-5" id="rankingGrid"></div>
+                <div class="shuffle-zone" id="planetPool"></div>
+                <div id="distFeedback" class="text-center mt-4 h4"></div>
             </div>
         </div>
     </div>
@@ -132,45 +277,38 @@
     </main>
 
     <script>
-        const planets = [
-            { name: "Mercury", desc: "The planet closest to the Sun. Small and rocky." },
-            { name: "Venus", desc: "Hottest planet in our solar system with a thick toxic atmosphere." },
-            { name: "Earth", desc: "The only planet known to support life, covered mostly by water." },
-            { name: "Mars", desc: "The Red Planet, home to the largest volcano in the solar system." },
-            { name: "Jupiter", desc: "A gas giant twice as massive as all other planets combined." },
-            { name: "Saturn", desc: "Adorned with a dazzling, complex system of icy rings." },
-            { name: "Uranus", desc: "An ice giant with a unique tilt, rotating on its side." },
-            { name: "Neptune", desc: "The most distant major planet, dark, cold and whipped by winds." }
+        const planetsData = [
+            { name: "Mercury", desc: "The planet closest to the Sun. Small and rocky.", img: "images/mercury.png" },
+            { name: "Venus", desc: "Hottest planet in our solar system with a thick toxic atmosphere.", img: "images/venus.png" },
+            { name: "Earth", desc: "The only planet known to support life, covered mostly by water.", img: "images/earth.png" },
+            { name: "Mars", desc: "The Red Planet, home to the largest volcano in the solar system.", img: "images/mars.png" },
+            { name: "Jupiter", desc: "A gas giant twice as massive as all other planets combined.", img: "images/jupiter.png" },
+            { name: "Saturn", desc: "Adorned with a dazzling, complex system of icy rings.", img: "images/saturn.png" },
+            { name: "Uranus", desc: "An ice giant with a unique tilt, rotating on its side.", img: "images/uranus.png" },
+            { name: "Neptune", desc: "The most distant major planet, dark, cold and whipped by winds.", img: "images/neptune.png" }
         ];
 
-        // UI Toggles
-        function resetCard() {
-            document.getElementById('knowPlanetsStatic').style.display = 'block';
-            document.getElementById('identifyGameUI').style.display = 'none';
-        }
-
-        // --- IDENTIFY GAME LOGIC ---
         let currentTarget = null;
         function startIdentifyGame() {
             document.getElementById('knowPlanetsStatic').style.display = 'none';
             document.getElementById('identifyGameUI').style.display = 'block';
             nextGameQuestion();
         }
-
+        function resetIdentifyCard() {
+            document.getElementById('knowPlanetsStatic').style.display = 'block';
+            document.getElementById('identifyGameUI').style.display = 'none';
+        }
         function nextGameQuestion() {
-            currentTarget = planets[Math.floor(Math.random() * planets.length)];
+            currentTarget = planetsData[Math.floor(Math.random() * planetsData.length)];
             document.getElementById('gameClue').innerText = "Clue: " + currentTarget.desc;
             document.getElementById('gameGuess').value = "";
             document.getElementById('gameFeedback').innerText = "";
         }
-
         function checkIdentifyGuess() {
-            const guessInput = document.getElementById('gameGuess');
-            const guess = guessInput.value.trim().toLowerCase();
+            const guess = document.getElementById('gameGuess').value.trim().toLowerCase();
             const feedback = document.getElementById('gameFeedback');
-            
             if (guess === currentTarget.name.toLowerCase()) {
-                feedback.innerHTML = "✅ Correct! That is " + currentTarget.name;
+                feedback.innerHTML = "✅ Correct!";
                 feedback.className = "small text-success";
                 setTimeout(nextGameQuestion, 2000);
             } else {
@@ -179,12 +317,67 @@
             }
         }
 
-        // Navigation & General Logic
+        let userProgress = [];
+        function startDistanceGame() {
+            document.getElementById('exercisesMenu').style.display = 'none';
+            document.getElementById('distanceGameUI').style.display = 'block';
+            initDistanceGame();
+        }
+        function closeDistanceGame() {
+            document.getElementById('exercisesMenu').style.display = 'block';
+            document.getElementById('distanceGameUI').style.display = 'none';
+        }
+        function initDistanceGame() {
+            userProgress = [];
+            document.getElementById('distFeedback').innerText = "";
+            renderSlots();
+            renderPool();
+        }
+        function renderSlots() {
+            const grid = document.getElementById('rankingGrid');
+            grid.innerHTML = '';
+            for (let i = 1; i <= 8; i++) {
+                grid.innerHTML += `<div class="col-6 col-md-3"><div class="rank-slot" id="slot-${i}"><div class="rank-number">${i}</div><div class="placeholder-text small text-secondary mt-2">?</div></div></div>`;
+            }
+        }
+        function renderPool() {
+            const pool = document.getElementById('planetPool');
+            pool.innerHTML = '';
+            const shuffled = [...planetsData].sort(() => Math.random() - 0.5);
+            shuffled.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'clickable-planet';
+                item.innerHTML = `<img src="${p.img}" class="planet-thumb-sm"><br><span class="small text-white">${p.name}</span>`;
+                item.onclick = () => handleChoice(p, item);
+                pool.appendChild(item);
+            });
+        }
+        function handleChoice(planet, element) {
+            const nextCorrect = planetsData[userProgress.length];
+            const feedback = document.getElementById('distFeedback');
+            if (planet.name === nextCorrect.name) {
+                userProgress.push(planet);
+                const slot = document.getElementById(`slot-${userProgress.length}`);
+                slot.classList.add('filled');
+                slot.innerHTML = `<img src="${planet.img}" class="planet-thumb-sm"><div class="text-white small fw-bold">${planet.name}</div><div class="rank-number">${userProgress.length}</div>`;
+                element.style.visibility = 'hidden';
+                feedback.innerText = "⭐ Great!";
+                feedback.style.color = "#00d4ff";
+                if (userProgress.length === 8) feedback.innerText = "🚀 MISSION COMPLETE!";
+            } else {
+                feedback.innerText = "❌ Try again!";
+                feedback.style.color = "#ff4d4d";
+            }
+        }
+
         const music = document.getElementById('bgMusic');
         const musicToggle = document.getElementById('musicToggle');
         const overlays = document.querySelectorAll('.view-overlay');
 
-        function closeAll() { overlays.forEach(o => o.classList.remove('active')); }
+        function closeAll() { 
+            overlays.forEach(o => o.classList.remove('active')); 
+            window.location.hash = ""; 
+        }
         
         document.getElementById('obsBtn').onclick = (e) => { e.preventDefault(); closeAll(); document.getElementById('observationOverlay').classList.add('active'); };
         document.getElementById('editionBtn').onclick = (e) => { e.preventDefault(); closeAll(); document.getElementById('editionOverlay').classList.add('active'); };
