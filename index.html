@@ -11,7 +11,7 @@
 
     <div class="stars"></div>
 
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic" loop preload="auto">
         <source src="audio/space-theme.mp3" type="audio/mpeg">
     </audio>
 
@@ -24,8 +24,8 @@
     <div id="skyMapOverlay" class="view-overlay">
         <div class="view-header">
             <span>LIVE STELLAR TRACKER</span>
-            <div id="skyLoader" class="loader-text">Initializing Star Map...</div>
             <button class="close-view btn-close btn-close-white"></button>
+            
         </div>
         <iframe id="skyIframe" data-src="https://stellarium-web.org/" width="100%" height="100%" frameborder="0"></iframe>
     </div>
@@ -33,7 +33,6 @@
     <div id="solarOverlay" class="view-overlay">
         <div class="view-header">
             <span>REAL-TIME SOLAR SYSTEM</span>
-            <div id="solarLoader" class="loader-text">Calibrating Orbits...</div>
             <button class="close-view btn-close btn-close-white"></button>
         </div>
         <iframe id="solarIframe" data-src="https://www.solarsystemscope.com/iframe" width="100%" height="100%" frameborder="0"></iframe>
@@ -44,31 +43,9 @@
             <span id="logHeaderTitle">PLANETARY OBSERVATION LOG</span>
             <button class="close-view btn-close btn-close-white"></button>
         </div>
-        
         <div id="obsDashboard" class="observation-content p-4 p-md-5">
             <h2 class="text-white mb-4">Planets</h2>
-            <div class="row g-4" id="planetGrid">
-                </div>
-        </div>
-
-        <div id="obsDetail" class="observation-content p-4 p-md-5 d-none">
-            <button id="backToLog" class="btn btn-sm btn-outline-light mb-4">← Back to Planets</button>
-            <div class="row align-items-center">
-                <div class="col-lg-5">
-                    <div class="detail-container p-4">
-                        <h2 id="detName" class="mb-1">Planet Name</h2>
-                        <p id="detDesc" class="text-secondary small mb-4">Description...</p>
-                        <hr class="border-secondary opacity-25">
-                        <div id="detStats" class="stat-list">
-                            </div>
-                    </div>
-                </div>
-                <div class="col-lg-7 text-center">
-                    <div class="preview-wrapper">
-                        <img id="detImg" src="" alt="Planet View" class="img-fluid planet-3d-glow">
-                    </div>
-                </div>
-            </div>
+            <div class="row g-4" id="planetGrid"></div>
         </div>
     </div>
 
@@ -101,6 +78,7 @@
     </main>
 
     <script>
+        // Planet Data
         const planets = [
             { name: "Mercury", temp: "167°C", day: "58.64d", rev: "87.9d", diam: "4,879 km", mass: "3.30×10²³ kg", desc: "The planet closest to the Sun. Small and rocky.", img: "images/mercury.png" },
             { name: "Venus", temp: "464°C", day: "243d", rev: "224.7d", diam: "12,104 km", mass: "4.87×10²⁴ kg", desc: "Hottest planet in our solar system with a thick toxic atmosphere.", img: "images/venus.png" },
@@ -112,64 +90,34 @@
             { name: "Neptune", temp: "-201°C", day: "16.1h", rev: "164.8y", diam: "49,244 km", mass: "1.02×10²⁶ kg", desc: "The most distant major planet, dark, cold and whipped by winds.", img: "images/neptune.png" }
         ];
 
-        const grid = document.getElementById('planetGrid');
-        const obsDashboard = document.getElementById('obsDashboard');
-        const obsDetail = document.getElementById('obsDetail');
+        const music = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        const overlays = document.querySelectorAll('.view-overlay');
 
+        // Render Planets
         function renderPlanets() {
+            const grid = document.getElementById('planetGrid');
             grid.innerHTML = planets.map((p, i) => `
                 <div class="col-md-6">
                     <div class="planet-card">
                         <div class="d-flex justify-content-between align-items-center mb-2">
                             <h3 class="h4 mb-0">${p.name}</h3>
-                            <a href="#" class="obs-link" onclick="openPlanetDetail(${i})">Observation →</a>
+                            <a href="#" class="obs-link">Observation →</a>
                         </div>
-                        <div class="planet-stats mb-3">Diam: ${p.diam} | Temp: ${p.temp} | Day: ${p.day}</div>
+                        <div class="planet-stats mb-3">Diam: ${p.diam} | Temp: ${p.temp}</div>
                         <p class="small text-secondary">${p.desc}</p>
                     </div>
                 </div>
             `).join('');
         }
 
-        function openPlanetDetail(index) {
-            const p = planets[index];
-            document.getElementById('detName').innerText = p.name;
-            document.getElementById('detDesc').innerText = p.desc;
-            document.getElementById('detImg').src = p.img;
-            document.getElementById('logHeaderTitle').innerText = "OBSERVATION OF THE PLANET " + p.name.toUpperCase();
-            
-            document.getElementById('detStats').innerHTML = `
-                <div class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-10"><span>Diameter</span><span>${p.diam}</span></div>
-                <div class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-10"><span>Mass</span><span>${p.mass}</span></div>
-                <div class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-10"><span>Temp. Avg.</span><span>${p.temp}</span></div>
-                <div class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-10"><span>Sidereal Day</span><span>${p.day}</span></div>
-                <div class="d-flex justify-content-between py-2 border-bottom border-secondary border-opacity-10"><span>Revolution</span><span>${p.rev}</span></div>
-            `;
-
-            obsDashboard.classList.add('d-none');
-            obsDetail.classList.remove('d-none');
-        }
-
-        document.getElementById('backToLog').onclick = () => {
-            obsDetail.classList.add('d-none');
-            obsDashboard.classList.remove('d-none');
-            document.getElementById('logHeaderTitle').innerText = "PLANETARY OBSERVATION LOG";
-        };
-
-        const skyBtn = document.getElementById('skyMapBtn');
-        const solarBtn = document.getElementById('solarBtn');
-        const obsBtn = document.getElementById('obsBtn');
-        const skyOverlay = document.getElementById('skyMapOverlay');
-        const solarOverlay = document.getElementById('solarOverlay');
-        const obsOverlay = document.getElementById('observationOverlay');
-
-        const music = document.getElementById('bgMusic');
-        const musicToggle = document.getElementById('musicToggle');
-        let musicInteracted = false;
-
+        // Music Toggle Function
         function toggleMusic() {
             if (music.paused) {
-                music.play();
+                music.play().catch(error => {
+                    console.error("Playback failed:", error);
+                    alert("Audio file not found at 'audio/space-theme.mp3'. Please check your folder!");
+                });
                 musicToggle.innerHTML = "🔊 Music: ON";
             } else {
                 music.pause();
@@ -177,34 +125,47 @@
             }
         }
 
-        musicToggle.onclick = (e) => { e.preventDefault(); musicInteracted = true; toggleMusic(); };
+        musicToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            toggleMusic();
+        });
 
+        // Close All Overlays
         function closeAll() {
-            [skyOverlay, solarOverlay, obsOverlay].forEach(o => o.classList.remove('active'));
+            overlays.forEach(o => o.classList.remove('active'));
+            window.focus(); // Returns focus to main page for Esc key
         }
 
-        skyBtn.onclick = () => { 
-            closeAll(); 
-            skyOverlay.classList.add('active'); 
-            if(!document.getElementById('skyIframe').src) document.getElementById('skyIframe').src = document.getElementById('skyIframe').getAttribute('data-src'); 
-            if(!musicInteracted) { music.play(); musicToggle.innerHTML = "🔊 Music: ON"; musicInteracted = true; }
+        // Global Key Listener for ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "Escape") {
+                closeAll();
+            }
+        });
+
+        // Button Click Handlers
+        document.getElementById('skyMapBtn').onclick = () => {
+            closeAll();
+            document.getElementById('skyMapOverlay').classList.add('active');
+            const frame = document.getElementById('skyIframe');
+            if(!frame.src) frame.src = frame.getAttribute('data-src');
         };
 
-        solarBtn.onclick = () => { 
-            closeAll(); 
-            solarOverlay.classList.add('active'); 
-            if(!document.getElementById('solarIframe').src) document.getElementById('solarIframe').src = document.getElementById('solarIframe').getAttribute('data-src'); 
-            if(!musicInteracted) { music.play(); musicToggle.innerHTML = "🔊 Music: ON"; musicInteracted = true; }
+        document.getElementById('solarBtn').onclick = () => {
+            closeAll();
+            document.getElementById('solarOverlay').classList.add('active');
+            const frame = document.getElementById('solarIframe');
+            if(!frame.src) frame.src = frame.getAttribute('data-src');
         };
 
-        obsBtn.onclick = (e) => { 
-            e.preventDefault(); 
-            closeAll(); 
-            obsOverlay.classList.add('active'); 
-            if(!musicInteracted) { music.play(); musicToggle.innerHTML = "🔊 Music: ON"; musicInteracted = true; }
+        document.getElementById('obsBtn').onclick = (e) => {
+            e.preventDefault();
+            closeAll();
+            document.getElementById('observationOverlay').classList.add('active');
         };
 
         document.querySelectorAll('.close-view').forEach(b => b.onclick = closeAll);
+
         renderPlanets();
     </script>
 </body>
