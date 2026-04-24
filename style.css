@@ -2,9 +2,16 @@ body {
     margin: 0; padding: 0;
     background-color: #05070a;
     background-image: url('images/galaxy.jpg');
-    background-size: cover; background-position: center; background-attachment: fixed;
-    height: 100vh; color: white;
-    font-family: 'Inter', sans-serif; overflow: hidden;
+    background-size: cover; 
+    background-position: center; 
+    background-attachment: fixed;
+    /* FIXES START HERE */
+    min-height: 100vh;      /* Changed from height: 100vh */
+    overflow-x: hidden;     /* Prevent side scrolling */
+    overflow-y: auto;       /* ENABLE vertical scrolling */
+    /* FIXES END HERE */
+    color: white;
+    font-family: 'Inter', sans-serif;
 }
 
 .stars {
@@ -68,7 +75,7 @@ body {
 @keyframes blink { 50% { opacity: 0.3; } }
 
 /* Scene & Floating Objects */
-.space-scene { position: fixed; top: 0; left: 0; width: 100%; height: 100%; perspective: 1200px; z-index: 1; pointer-events: none; }
+.space-scene { position: absolute; top: 0; left: 0; width: 100%; height: 100%; perspective: 1200px; z-index: 1; pointer-events: none;overflow: hidden; }
 .floating-container { position: absolute; transform-style: preserve-3d; }
 .floating-container img { width: 100%; height: auto; }
 
@@ -77,7 +84,22 @@ body {
 .astronaut { width: 200px; bottom: 10%; right: 5%;animation: float3D-astronaut 10s ease-in-out infinite; }
 
 /* Hero UI */
-.hero-section { position: relative; height: 100vh; z-index: 10; }
+.hero-section {
+    position: relative; /* Added this */
+    min-height: 100vh;
+    padding: 100px 0;
+    z-index: 2;
+
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* Allows content to flow vertically */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 100px 0;
+    position: relative;
+    z-index: 2; /* Keeps text above the stars */
+}
 .btn-glass { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); color: white; transition: 0.3s; }
 .btn-glass:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
 .custom-title { letter-spacing: 8px; font-weight: bold; }
@@ -216,3 +238,174 @@ body {
             border-radius: 12px;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+        #realTimeSolar {
+    background: linear-gradient(to bottom, rgba(5, 7, 10, 0.8), rgba(10, 20, 50, 0.9)), 
+                url(''
+);
+    background-size: cover;
+    background-attachment: fixed;
+    border-top: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+.solar-preview-container img {
+    width: 100%;
+    max-width: 1000px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.5s ease;
+}
+
+.solar-preview-container img:hover {
+    transform: scale(1.01);
+    border-color: #00d4ff;
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.feature-item {
+    padding: 20px;
+    border-radius: 15px;
+    transition: background 0.3s;
+}
+
+.feature-item:hover {
+    background: rgba(255,255,255,0.05);
+}
+/* Sky Preview Styling */
+.sky-preview-wrapper img {
+    transition: filter 0.3s ease;
+}
+.sky-preview-wrapper:hover img {
+    filter: brightness(1.2);
+}
+
+#skyObservation {
+    background: linear-gradient(to bottom, rgba(10, 20, 50, 0.9), rgba(0, 0, 0, 1)), 
+                url(''
+);
+    background-size: cover;
+    background-attachment: fixed;
+}
+#challengesSection {
+    background: #000;
+    position: relative;
+}
+#challengesInfo h2 {
+    letter-spacing: -1px;
+}
+
+#challengesInfo .list-unstyled li {
+    position: relative;
+    padding-left: 0;
+    line-height: 1.6;
+}
+
+.illustration-frame img {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* This creates the slight glow seen in your screenshots */
+    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.1));
+}
+#illustration-frameSection {
+    background: #000;
+    position: relative;
+}
+/* Features Section Styling */
+.feature-box {
+    
+    transition: transform 0.3s ease;
+}
+
+.feature-box:hover {
+    transform: translateY(-10px);
+}
+
+.feature-box h6 {
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+}
+
+/* Final Contact Banner */
+.contact-banner {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background 0.3s;
+}
+
+.contact-banner:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.hover-white:hover {
+    color: white !important;
+}
+
+#webFeatures h2 {
+    letter-spacing: -0.5px;
+}
+/* Center the features and style icons */
+.feature-box {
+    text-align: center;
+    padding: 20px;
+    transition: transform 0.3s ease;
+}
+
+.feature-box:hover {
+    transform: translateY(-5px);
+}
+
+.feature-box .fs-1 {
+    color: #00d4ff; /* Match the blue globe/mobile icons in your screenshot */
+    margin-bottom: 15px;
+}
+
+/* Control Panel Container */
+.cta-control-panel {
+    background: rgba(255, 255, 255, 0.02);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 60px 20px;
+    margin-top: 50px;
+}
+
+/* Specific button styles for the final panel */
+.btn-glass {
+    background: #1a1a1a;
+    border: 1px solid #333;
+    color: #fff;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-glass:hover {
+    background: #333;
+    border-color: #555;
+    color: #00d4ff;
+}
+
+.btn-glass-primary {
+    background: #111;
+    border: 1px solid #444;
+    color: #fff;
+    font-weight: 500;
+}
+footer {
+    background-color: #000 !important;
+}
+
+.hover-white:hover {
+    color: #fff !important;
+    transition: 0.2s ease;
+}
+
+footer h6 {
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+}
+
+footer .border-top {
+    border-color: rgba(255, 255, 255, 0.05) !important;
+}

@@ -100,7 +100,7 @@
         /* --- PURE CSS OBSERVATION LOG LOGIC --- */
         .planet-detail-view {
             display: none;
-            animation: fadeIn 0.5s ease;
+            animation: 0.5s linear 1s infinite alternate slide-in;
         }
         #view-mercury:target, #view-venus:target, #view-earth:target, #view-mars:target,
         #view-jupiter:target, #view-saturn:target, #view-uranus:target, #view-neptune:target {
@@ -138,6 +138,7 @@
     </style>
 </head>
 <body>
+    
 
     <div class="stars"></div>
 
@@ -365,6 +366,148 @@
             </div>
         </div>
     </main>
+    <section id="realTimeSolar" class="py-5">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold text-white mb-3">Real-time Solar system</h2>
+        <p class="lead text-white-50 mb-5">Observe the solar system with our interactive 3D animations, directly from your browser.<br>
+        Access the catalog to discover all the available observations:</p>
+        
+        <button class="btn btn-glass px-4 py-2 mb-5" onclick="document.getElementById('solarBtn').click()">Solar system →</button>
+
+        <div class="solar-preview-container mb-5">
+            <img src="images/solar-map.png" alt="Solar System Preview" class="img-fluid rounded-4 shadow-lg border border-secondary">
+        </div>
+
+        <div class="row g-4 mt-5">
+            <div class="col-md-3">
+                <div class="feature-item">
+                    <div class="feature-icon">🔍</div>
+                    <h5 class="text-white fw-bold">Immersive exploration</h5>
+                    <p class="small text-secondary">See, analyze, understand</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-item">
+                    <div class="feature-icon">🌍</div>
+                    <h5 class="text-white fw-bold">Real-time data</h5>
+                    <p class="small text-secondary">Actual positions, distances and rotations</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-item">
+                    <div class="feature-icon">🚀</div>
+                    <h5 class="text-white fw-bold">Navigation</h5>
+                    <p class="small text-secondary">Intuitive navigation and voice control</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="feature-item">
+                    <div class="feature-icon">🧩</div>
+                    <h5 class="text-white fw-bold">Challenges & Quizzes</h5>
+                    <p class="small text-secondary">Challenges and interactive exercises</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="skyObservation" class="py-5 bg-black">
+    <div class="container text-center">
+        <div class="sky-preview-wrapper mb-5">
+            <img src="images/sky-map.png" alt="Solar System Preview" class="img-fluid rounded-4 shadow-lg border border-secondary">
+        </div>
+        <h2 class="display-5 fw-bold text-white mb-3">Real-time sky observation</h2>
+        <p class="lead text-white-50 mb-4">Observe the stars, constellations and planets in the sky as they appear from your position on Earth.<br>
+        Access the interactive observation :</p>
+        <button class="btn btn-glass px-4 py-2 mb-5" onclick="document.getElementById('skyMapBtn').click()">Sky →</button>
+    </div>
+</section>
+<section id="challengesInfo" class="py-5 bg-black">
+    <div class="container">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <h2 class="text-white display-5 fw-bold mb-4">Challenges, quizzes and exercises</h2>
+                <p class="text-white-50 lead mb-5">
+                    Discover our interactive exercises aimed at providing a clear understanding of the solar system and constellations. 
+                    You will test your knowledge in a fun way by identifying the planets, their characteristics, their distances, sizes and orbits.
+                </p>
+                
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="mb-3" style="font-size: 2rem;">❓</div>
+                        <h5 class="text-white fw-bold">Quiz</h5>
+                        <ul class="list-unstyled text-secondary small">
+                            <li class="mb-2">Quiz by theme: planets, sun, orbits, moons, asteroids.</li>
+                            
+                            <li>Instant correction and final score.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="mb-3" style="font-size: 2rem;">🧩</div>
+                        <h5 class="text-white fw-bold">Exercices</h5>
+                        <ul class="list-unstyled text-secondary small">
+                            <li class="mb-2">Associate planet and characteristics.</li>
+                            <li class="mb-2">Guess the planets according to their distance or size.</li>
+                            
+                            <li>Identify a planet according to an animation or a clue.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="illustration-frame p-3 rounded-4" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);">
+                    <img src="images/challenges-illustration.jpg" alt="Observing the Solar System" class="img-fluid rounded-4 shadow-lg">
+                </div>
+            </div>
+        </div>
+    </div>
+    </section>
+<section id="finalCallToAction" class="py-5" style="background: #000;">
+    <div class="container text-center">
+        <h2 class="text-white display-5 fw-bold mb-5">Thought and built for the web</h2>
+        
+        <div class="row justify-content-center g-4 mb-5 pb-5">
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="mb-3 fs-1 text-info">🌐</div>
+                    <h5 class="text-white fw-bold">Accessible from a browser</h5>
+                    <p class="text-secondary small">Access to observations from any modern web browser without downloads.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <div class="mb-3 fs-1 text-info">📱</div>
+                    <h5 class="text-white fw-bold">Mobile & Desktop compatible</h5>
+                    <p class="text-secondary small">Observations adapted for all screens, from mobile phones to wide desktops.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-control-panel py-5 rounded-4" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+            <p class="text-white lead mb-4">Ready to give it a try?try all these ABOVE!</p>
+            
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <button class="btn btn-glass px-4" onclick="document.getElementById('observationsBtn').click()">Observations</button>
+                <button class="btn btn-glass px-4" onclick="document.getElementById('editionBtn').click()">Edition</button>
+                <button class="btn btn-glass px-4" onclick="document.getElementById('equipmentBtn').click()">Equipment</button>
+                <button class="btn btn-glass px-4" onclick="document.getElementById('skyMapBtn').click()">Sky map</button>
+                <button class="btn btn-glass-primary px-4 py-2" onclick="document.getElementById('solarBtn').click()">Solar system →</button>
+            </div>
+        </div>
+
+        <div class="mt-5 pt-4">
+            <div class="p-3 rounded-pill d-inline-block px-5" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                <p class="mb-0 text-white-50 small">
+                    Are you a school or professional organization? 
+                    <a href="#" class="text-info text-decoration-none ms-2" onclick="alert('Contacting support...')">Contact us for educational use</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
 
     <script>
         const planetsData = [
@@ -509,5 +652,48 @@
             document.getElementById('contactOverlay').classList.add('active'); 
         };
     </script>
+    <footer class="py-5 bg-black border-top border-secondary">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4">
+                <div class="mb-3">
+                    <img src="images/logo-yellow.png" alt="L'Observatoire Interactif" height="200" class="mb-2">
+                </div>
+                <p class="text-white mb-1 fw-bold">STELLA</p>
+                <p class="text-white-50 small mb-4">Observation of the sky and the solar system in real time</p>
+                <div class="d-flex gap-3 small">
+                    <a href="#" class="text-white-50 text-decoration-none hover-white">YouTube</a>
+                    <a href="#" class="text-white-50 text-decoration-none hover-white">Instagram</a>
+                    <a href="#" class="text-white-50 text-decoration-none hover-white">TikTok</a>
+                </div>
+            </div>
+
+            <div class="col-6 col-lg-3 offset-lg-1">
+                <h6 class="text-white fw-bold mb-4">Interactive observations</h6>
+                <ul class="list-unstyled small text-white-50">
+                    <li class="mb-2"><a href="#" class="text-reset text-decoration-none hover-white">Solar system</a></li>
+                    <li class="mb-2"><a href="#" class="text-reset text-decoration-none hover-white">Planets rotation</a></li>
+                    <li class="mb-2"><a href="#" class="text-reset text-decoration-none hover-white">Planets revolution</a></li>
+                </ul>
+            </div>
+
+            <div class="col-6 col-lg-2">
+                <h6 class="text-white fw-bold mb-4">Contact</h6>
+                <ul class="list-unstyled small text-white-50">
+                    <li class="mb-2"><a href="#" class="text-reset text-decoration-none hover-white">Contact</a></li>
+                    <li class="mb-2"><a href="#" class="text-reset text-decoration-none hover-white">Social networks</a></li>
+                </ul>
+            </div>
+
+            <div class="col-6 col-lg-2">
+                <h6 class="text-white fw-bold mb-4">Legal</h6>
+                <ul class="list-unstyled small text-white-50">
+                    <li class="mb-2"><a href="#" class="text-reset text-decoration-none hover-white">Legal notices</a></li>
+                    <li class="mb-2"><a href="#" class="text-reset text-decoration-none hover-white">Terms of use</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
 </body>
 </html>
