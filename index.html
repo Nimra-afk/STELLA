@@ -660,6 +660,44 @@
             document.getElementById('contactOverlay').classList.add('active'); 
         };
     </script>
+
+<section id="apod-section" class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card bg-dark text-white border-secondary shadow-lg overflow-hidden" style="border-radius: 18px; backdrop-filter: blur(10px); background: rgba(11, 12, 16, 0.85);">
+                
+                <div class="card-header border-secondary d-flex justify-content-between align-items-center py-3 px-4">
+                    <h4 class="m-0 fw-bold" style="color: #00d4ff;">
+                        ✨ Astronomy Picture of the Day
+                    </h4>
+                    <span id="apod-date" class="badge bg-secondary text-light">Loading date...</span>
+                </div>
+
+                <div class="card-body p-4 text-center">
+                    <div id="apod-loader" class="py-5">
+                        <div class="spinner-border text-info" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2 text-white-50">Fetching cosmic imagery from NASA...</p>
+                    </div>
+
+                    <div id="apod-media-container" class="d-none mb-4">
+                        <img id="apod-img" src="" alt="NASA APOD" class="img-fluid rounded shadow" style="max-height: 550px; width: auto; object-fit: contain;">
+                        <iframe id="apod-video" class="w-100 rounded d-none" style="height: 450px;" frameborder="0" allowfullscreen></iframe>
+                    </div>
+
+                    <div id="apod-details" class="d-none text-start">
+                        <h3 id="apod-title" class="fw-bold text-warning mb-2"></h3>
+                        <p id="apod-explanation" class="text-white-50" style="line-height: 1.7; font-size: 0.95rem;"></p>
+                        <div id="apod-copyright" class="small text-secondary fst-italic"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
     <footer class="py-5 bg-black border-top border-secondary">
     <div class="container">
         <div class="row g-4">
@@ -715,13 +753,22 @@
     document.addEventListener("DOMContentLoaded", fetchNASA_APOD);
 
     async function fetchNASA_APOD() {
-        
-        const apiKey = qfVQ8g2sde9JZY0ctHz0tWRfARTmpr5fu4HSjoDv; 
-        const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`;
-
         const loader = document.getElementById('apod-loader');
         const mediaContainer = document.getElementById('apod-media-container');
         const detailsContainer = document.getElementById('apod-details');
+
+        // Check Local Storage Cache for Instant Loading
+        const today = new Date().toISOString().split('T')[0];
+        const cachedApod = localStorage.getItem('stella_apod_data');
+        const cachedDate = localStorage.getItem('stella_apod_date');
+
+        if (cachedApod && cachedDate === today) {
+            renderApod(JSON.parse(cachedApod));
+            return;
+        }
+
+        const apiKey = 'qfVQ8g2sde9JZY0ctHz0tWRfARTmpr5fu4HSjoDv'; 
+        const url = `https://api.nasa.gov/planetary/apod?api_key=${apiKey}`; 
 
         try {
             const response = await fetch(url);
@@ -732,43 +779,74 @@
 
             const data = await response.json();
 
-            // 1. Set Date & Title
-            document.getElementById('apod-date').innerText = data.date;
-            document.getElementById('apod-title').innerText = data.title;
-            document.getElementById('apod-explanation').innerText = data.explanation;
+            // Save to local storage for today
+            localStorage.setItem('stella_apod_data', JSON.stringify(data));
+            localStorage.setItem('stella_apod_date', today);
 
-            // 2. Handle Copyright (if available)
-            if (data.copyright) {
-                document.getElementById('apod-copyright').innerText = `© Image Credit: ${data.copyright.trim()}`;
-            }
-
-            // 3. Handle Image vs. Video content type
-            if (data.media_type === 'image') {
-                const img = document.getElementById('apod-img');
-                img.src = data.hdurl || data.url;
-                img.classList.remove('d-none');
-            } else if (data.media_type === 'video') {
-                const video = document.getElementById('apod-video');
-                video.src = data.url;
-                video.classList.remove('d-none');
-            }
-
-            // 4. Hide loader and reveal content
-            loader.classList.add('d-none');
-            mediaContainer.classList.remove('d-none');
-            detailsContainer.classList.remove('d-none');
+            renderApod(data);
 
         } catch (error) {
             console.error('Error fetching APOD:', error);
-            loader.innerHTML = `
-                <div class="text-danger py-4">
-                    <h5>Failed to load NASA APOD</h5>
-                    <p class="small text-white-50">Please check your internet connection or API key.</p>
-                </div>
-            `;
+            if (loader) {
+                loader.innerHTML = `
+                    <div class="text-danger py-4">
+                        <h5>Failed to load NASA APOD</h5>
+                        <p class="small text-white-50">Please check your internet connection or API key.</p>
+                    </div>
+                `;
+            }
+        }
+    }
+
+    function renderApod(data) {
+        const loader = document.getElementById('apod-loader');
+        const mediaContainer = document.getElementById('apod-media-container');
+        const detailsContainer = document.getElementById('apod-details');
+
+        // 1. Set Text Content
+        if (document.getElementById('apod-date')) document.getElementById('apod-date').innerText = data.date;
+        if (document.getElementById('apod-title')) document.getElementById('apod-title').innerText = data.title;
+        if (document.getElementById('apod-explanation')) document.getElementById('apod-explanation').innerText = data.explanation;
+
+        if (data.copyright && document.getElementById('apod-copyright')) {
+            document.getElementById('apod-copyright').innerText = `© Image Credit: ${data.copyright.trim()}`;
+        }
+
+        // Show details text immediately
+        if (detailsContainer) detailsContainer.classList.remove('d-none');
+
+        // 2. Handle Image Content
+        if (data.media_type === 'image') {
+            const img = document.getElementById('apod-img');
+            if (img) {
+                const tempImg = new Image();
+                tempImg.src = data.url;
+
+                const displayImage = () => {
+                    img.src = tempImg.src;
+                    img.classList.remove('d-none');
+                    if (loader) loader.classList.add('d-none');
+                    if (mediaContainer) mediaContainer.classList.remove('d-none');
+                };
+
+                tempImg.onload = displayImage;
+                tempImg.onerror = displayImage; // Fallback so loader doesn't hang
+            }
+        } 
+        // 3. Handle Video Content
+        else if (data.media_type === 'video') {
+            const video = document.getElementById('apod-video');
+            if (video) {
+                video.src = data.url;
+                video.classList.remove('d-none');
+                if (loader) loader.classList.add('d-none');
+                if (mediaContainer) mediaContainer.classList.remove('d-none');
+            }
         }
     }
 </script>
+
+
 
 </body>
 </html>
